@@ -6,7 +6,7 @@ This repo provides a baseline coding agreement for Python that can be extended f
 
 ## Contributing
 
-This project welcomes contributions and suggestions, for example coding agreements for languages other than Python or coding agreement for specific use cases.
+This project welcomes contributions and suggestions, for example coding agreements for languages other than Python or coding agreements for specific use cases.
 
 Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to,
 and actually do, grant us the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
