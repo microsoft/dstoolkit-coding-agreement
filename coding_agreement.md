@@ -3,11 +3,11 @@
 ## Purpose of this document
 
 This document sets a baseline to ensure code quality during a project. It provides guidelines on Python coding best practices, but it can be adapted to any other programming language.
-You will also find insights on responsibilities expected for a developer / data scientist before opening a Pull Request, and for a reviewer to ensure a good and constructive review.
+You will also find insights on responsibilities expected from a developer / data scientist before opening a Pull Request, and from a reviewer to ensure a good and constructive review.
 
 ## Code reviews
 
-[Code reviews](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/inclusion-in-code-review/) are an important part of our job as data scientists. They help share our work with others and grow together as a team while improving code quality and sharing understanding
+[Code reviews](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/inclusion-in-code-review/) are an important part of our job as data scientists. They help ensure the quality of our work, share it with others, and grow together as a team while improving code quality and sharing understanding.
 
 ### Cheat sheets
 
@@ -23,7 +23,7 @@ Here are below two cheat sheets to follow as a PR author and as PR reviewer.
 * [Is the language specific guidance respected?](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/recipes/)
 * [Are relevant reviewers (if not enforced by policy) added?](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/process-guidance/author-guidance/#add-relevant-reviewers)
 
-Usually, a PR corresponds to a single task, i.e., a unit of added value to the codebase, e.g., a feature, a bugfix, documentation, etc. However, if the PR seems too large or complex, it might be an indicator that a task should be splitted into multiple pieces and have a PR for each of them.
+Usually, a PR corresponds to a single task, i.e., a unit of added value to the codebase, e.g., a feature, a bugfix, documentation, etc. However, if the PR seems too large or complex, it might be an indicator that a task should be split into multiple pieces and have a PR for each of them.
 
 When a review is conducted, [be open to feedback](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/process-guidance/author-guidance/#be-open-to-receive-feedback).
 
@@ -38,7 +38,7 @@ You can find more detailed guidance as an author on the [ISE Code With Engineeri
 
 You can find more detailed guidance as a reviewer on the [ISE Code With Engineering Playbook](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/process-guidance/reviewer-guidance/).
 
-## Tooling used [DISCUSS]
+## Tooling used
 
 Code Quality can be enforced through tools (linters, formatters, type checkers, etc.) that automatically ensure consistency of the code. This topic should be discussed at the beginning of any project to decide which tools are best for your specific project.
 
@@ -46,7 +46,7 @@ Code Quality can be enforced through tools (linters, formatters, type checkers, 
 
 This coding agreement provides some guidelines for Python, but they can be adapted to any other programming language.
 
-The guidelines in this section need to be followed by developers. Reviewers will also need to validate these guidelines during PR review. The comments in brackets next to the section title refer to production-ready code. Experimental or exploratory code does not need to strictly follow these guidelines, but it is recommended that most of the rules are followed, because then it will be much easier to convert experimental code to production-ready code when needed.
+The guidelines in this section need to be followed by developers / data scientists. Reviewers will also need to validate these guidelines during PR review. The comments in brackets next to the section title refer to production-ready code. Experimental or exploratory code does not need to strictly follow these guidelines. However, it is recommended that most of the rules are followed, because then it will be much easier to convert experimental code into production-ready code when needed.
 
 ### Code Layout [MUST]
 
@@ -88,9 +88,9 @@ print(x)
 ### Naming convention [MUST]
 
 * `language, spelling`: 
-    * Class name, function names and variables are written in English. Use meaningful and grammatically correct names.
+    * Class names, function names, and variable names are written in English. Use meaningful and grammatically correct names.
     * Use verbs to name functions and methods (they are actions), and names to name variables and classes (they are things).
-* `class name`: name should start with an uppercase and follow the camlCase convention if more than two words.
+* `class name`: name should start with an uppercase and follow the camlCase convention if it has more than two words.
 * `function name`:
     * lowercase, words separated by an underscore.
     * add `self` argument at first position if the method is a class's method.
@@ -99,7 +99,7 @@ print(x)
     * use 1 underscore at the beginning of a private field.
     * specify the type of your input parameters
     * always provide a return type (use 'None' if 'void').
-`variable name`: lowercase, words separated by an underscore.
+* `variable name`: lowercase, words separated by an underscore.
 
 ```python
 class CatalogInformation:
@@ -153,7 +153,7 @@ def get_info(self) -> str, int:
 
 ### Use context managers [MUST]
 
-Context managers are tool to use in situation where you need to run some code that has preconditions and postconditions.
+Context managers are tool to use in situations where you need to run some code that has preconditions and postconditions.
 
 For instance, when you read the content of a file, you need to ensure that you close the handle regardless of the success or the failure of the operation. With the `with` keyword you can achieve this:
 
@@ -161,7 +161,7 @@ For instance, when you read the content of a file, you need to ensure that you c
 with open(filename) as fd:
     process_file(fd)
 
-# Note, that parenthesis are supported in Python 3.10 for context manager,
+# Note that parentheses are supported in Python 3.10 for context manager,
 # useful when you have many 'with'
 with (
     CtxManager1() as example1,
@@ -171,7 +171,7 @@ with (
     ...
 ```
 
-You can implement your own context manager may you need to execute actions in a certain order. Consider the case where you want to update a service configuration. You need first to stop the service, update the configuration then start the service again:
+You can implement your own context manager should you need to execute actions in a certain order. Consider the case where you want to update a service configuration. You need first to stop the service, update the configuration then start the service again:
 
 ```python
 class ServiceHandler:
@@ -192,15 +192,15 @@ if (__name__ == '__main__'):
 
 ### Exceptions handling [MUST]
 
-Hiding an exception or not properly anticipating potential errors (accessing an API for instance, network issues *can* arise) can lead to unexpected behaviors. Although a class or a function can affect default values to input parameters, not ensuring their validity, or not notifying the caller could lead to wrong results and difficulties to debug.
+Hiding an exception or not properly anticipating potential errors (accessing an API for instance, network issues *can* arise) can lead to unexpected behaviors or terminating the execution. Another example is that the caller should be notified if a function receives wrong input parameters to avoid this way wrong results that might be difficult to debug.
 
 Each function has a logic, this logic must be followed by exceptions raised. For instance, if you have a function that get some data from an API, exceptions raised by this function should be logical: connection error, timeout etc. The exception must be raised at the right level of abstraction.
 
-If you choose to propagate the exception to the caller, ensure that you do not expose sensitive information. Tracebacks of exception can contain sensitive details leading to exposing intellectual property.
+If you choose to propagate the exception to the caller, ensure that you do not expose sensitive information. Tracebacks of exceptions can contain sensitive details leading to exposing intellectual property.
 
-Do not use exceptions as a `go-to` logic, meaning catching an exception and from the `except` calling other business code, the flow of the program will become harder to read. Exceptions are *usually* to notify the caller that something unexpected occured.
+Do not use exceptions as a `go-to` logic, meaning catching an exception and from the `except` calling other business code - the flow of the program will become harder to read. Exceptions are *usually* to notify the caller that something unexpected occured.
 
-Finally, [observability](https://microsoft.github.io/code-with-engineering-playbook/observability/) is an important engineering fundamental. Properly handling exceptions and managing observability (with AppInsight for instance) will lead to a more robust application and easy to debug when something not expected occurs.
+Finally, [observability](https://microsoft.github.io/code-with-engineering-playbook/observability/) is an important engineering fundamental. Properly handling exceptions and managing observability (with AppInsight for instance) will lead to a more robust application and easier debugging when something unexpected occurs.
 
 ```python
 # Never do ...
@@ -221,7 +221,7 @@ def process_data() -> None:
 
 ### Unit tests [MUST]
 
-Unit testing is a core tool in software engineering. They help us test our code, encourage good design practices, and reduce chances to have bugs hitting production. Unit tests can improve development efficiency.
+Unit testing is a core tool in software engineering. They help us verify the correctness of our code, encourage good design practices, and reduce chances to have bugs hitting production. Unit tests can improve development efficiency.
 
 Unit tests should be:
 
@@ -229,7 +229,7 @@ Unit tests should be:
 * Fast: should run in milliseconds.
 * Isolated: removing all external dependencies ensures reliability and speed.
 
-`pytest` provides a set of features helpful. Below some examples:
+`pytest` provides a set of helpful features. Below are some examples:
 
 ```python
 # Execute this test 3 times, with a, b, and c as input_value
